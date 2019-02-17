@@ -1,0 +1,92 @@
+#!/bin/bash
+
+function_exists() {
+  type ${1} > /dev/null 2>&1;
+}
+
+i() {
+  local _what _function
+  _what=${1}
+
+  _function="info_1_${_what}"
+  if function_exists ${_function}; then
+    eval ${_function}
+  else
+    echo "No info for '${_what}'"
+    return 1
+  fi
+}
+
+ii() {
+  local _what _function
+  _what=${1}
+
+  _function="info_2_${_what}"
+  if function_exists ${_function}; then
+    eval ${_function}
+  else
+    # Showing info level 1
+    i ${1}
+  fi
+}
+
+info_1_() {
+  echo "
+My Shell info.
+
+Usage: i[i] COMMAND
+
+Basic commands:
+  man   - a nice summary of bash commands and shortcuts and others
+  list  - list available commands
+  help  - see this help
+
+Available commands:"
+  info_1_list
+}
+
+alias info_1_help=info_1_
+
+info_1_list() {
+  if [[ "${CURRENT_SHELL}" == "bash" ]]; then
+    echo $(declare -F | grep info_1 | cut -d '_' -f 3)
+  else
+    echo $(print -rl -- ${(k)functions} | grep info_1 | cut -d '_' -f 3)
+  fi
+}
+
+info_1_man() {
+  cat ~/.shell.d/man/bash
+}
+
+################################################################################
+
+# Shell auto complete
+if [[ "${CURRENT_SHELL}" == "bash" ]]; then
+  _i_completion() {
+    COMPREPLY=()
+    local word="${COMP_WORDS[COMP_CWORD]}"
+
+    options=$(declare -F | grep info_1 | cut -d '_' -f 3)
+    if [ "$COMP_CWORD" -eq 1 ]; then
+      COMPREPLY=( $(compgen -W "${options}" -- "$word") )
+    fi
+  }
+  complete -F _i_completion i
+  complete -F _i_completion ii
+else
+  _i_completion() {
+    local words completions options
+    read -cA words
+
+    options=$(print -rl -- ${(k)functions} | grep info_1 | cut -d '_' -f 3)
+
+    if [ "${#words}" -eq 2 ]; then
+      completions="${options}"
+    fi
+
+    reply=(${(ps:\n:)completions})
+  }
+  compctl -K _i_completion i
+  compctl -K _i_completion ii
+fi

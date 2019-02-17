@@ -1,0 +1,9 @@
+#!/bin/bash
+
+info_1_docker() {
+  docker info | head -n5
+}
+
+info_2_docker() {
+  docker info
+}

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+init_pyenv() {
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  export VIRTUALENVWRAPPER_PYTHON=${PYENV_ROOT}/shims/python
+
+  if command -v pyenv > /dev/null; then
+    echo "Initializing PYENV..."
+    eval "$(pyenv init -)";
+  fi
+}
+
+info_1_python() {
+  python --version
+}
+
+info_2_python() {
+  pyenv versions
+}
+
+init_pyenv

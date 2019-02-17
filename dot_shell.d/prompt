@@ -1,0 +1,103 @@
+#!/bin/bash
+
+_THEME_PROMPT_BG=${_THEME_PROMPT_BG:-$ResetColor}
+_THEME_PROMPT_ROOT_BG=${_THEME_PROMPT_ROOT_BG:-$BoldDeepPink1Bg}
+_THEME_PROMPT_USER=${_THEME_PROMPT_USER:-$BoldGreenFg}
+_THEME_PROMPT_HOST=${_THEME_PROMPT_HOST:-$BoldBlue1Fg}
+_THEME_PROMPT_DIR=${_THEME_PROMPT_DIR:-$BoldYellowFg}
+_THEME_PROMPT_LINE=${_THEME_PROMPT_LINE:-$BoldWhiteFg}
+_THEME_PROMPT_OFF=${_THEME_PROMPT_OFF:-$GreyFg}
+
+# Root overrides
+if is_root; then
+  _THEME_PROMPT_USER=${BoldWhiteFg}
+  _THEME_PROMPT_HOST=${BoldWhiteFg}
+  _THEME_PROMPT_DIR=${BoldWhiteFg}
+  _THEME_PROMPT_LINE=${BoldWhiteFg}
+  _THEME_PROMPT_OFF=${BoldWhiteFg}
+  _THEME_PROMPT_BG=${_THEME_PROMPT_ROOT_BG}
+fi
+
+jobs_prompt_info() {
+  _jobs_count=$(jobs | wc -l | xargs)
+  if [[ "${_jobs_count}" -ne "0" ]]; then
+    echo -e "${_THEME_PROMPT_DIR}(${_jobs_count}) "
+  fi
+}
+
+_prompt_last_exit_status() {
+  # Example:
+  # 1 ↵
+
+  if [[ "${CURRENT_SHELL}" == "bash" ]]; then
+    echo -e '$(exit_code=$?; [ $exit_code -eq 0 ] || echo "'"${BoldRed1Fg}"'${exit_code} ↵ \n'"${ResetColor}"'")'
+  elif [[ "${CURRENT_SHELL}" == "zsh" ]]; then
+    echo -e "%(?..${BoldRed1Fg}%? ↵${ResetColor}\n)"
+  fi
+}
+
+_prompt_first_line() {
+  # Example:
+  # - Sun Feb10 14:59:59 -----------------------------------------------------------
+  local _date_prompt='$(date +"%a %b%d %H:%M:%S")'
+  echo -e "${GreyFg}- ${_date_prompt} -----------------------------------------------------------${ResetColor}"
+}
+
+_prompt_second_line() {
+  # Example:
+  # cravo@cravobook in ~/some_repo_with_git
+
+  local _user _host _cwd
+  if [[ "${CURRENT_SHELL}" == "bash" ]]; then
+    _user='\u'
+    _host='\h'
+    _cwd='\w'
+  elif [[ "${CURRENT_SHELL}" == "zsh" ]]; then
+    _user='%n'
+    _host='%m'
+    _cwd='%~'
+  fi
+
+  if is_root; then
+    _root_prompt="[[[ $MY_ENVIRONMENT ]]] "
+  fi
+
+  local _user_prompt="${_THEME_PROMPT_USER}${_user}"
+  local _host_prompt="${_THEME_PROMPT_HOST}${_host}"
+  local _cwd_prompt="${_THEME_PROMPT_OFF}in ${_THEME_PROMPT_DIR}${_cwd}"
+
+  echo -e "${_root_prompt}${_user_prompt}${_THEME_PROMPT_OFF}@${_host_prompt} ${_cwd_prompt}${ResetColor}"
+}
+
+_prompt_third_line() {
+  # Example:
+  # on master ✖ (1)# false
+  local _prompt_symbol _git_prompt_info _root_prompt _jobs_count
+  _git_prompt_info='$(git_prompt_info)'
+  _jobs_prompt_info='$(jobs_prompt_info)'
+
+  if [[ "${CURRENT_SHELL}" == "bash" ]]; then
+    _prompt_symbol="\$"
+  elif [[ "${CURRENT_SHELL}" == "zsh" ]]; then
+    _prompt_symbol="#"
+  fi
+
+  echo -e "${_git_prompt_info}${_jobs_prompt_info}${ResetColor}${BoldWhiteFg}${_prompt_symbol}${ResetColor} "
+}
+
+# Example:
+# - Sun Feb10 14:59:59 -----------------------------------------------------------
+# ┏ cravo@cravobook in ~/some_repo_with_git
+# ┗ on master ✖ # false
+# 1 ↵
+#
+# - Sun Feb10 14:59:59 -----------------------------------------------------------
+# ┏ cravo@cravobook in ~/some_repo_with_git
+# ┗ on master ✖ #
+
+_prompt="$(_prompt_last_exit_status)
+$(_prompt_first_line)
+${_THEME_PROMPT_BG}${_THEME_PROMPT_LINE}┏ $(_prompt_second_line)
+${_THEME_PROMPT_BG}${_THEME_PROMPT_LINE}┗ $(_prompt_third_line)"
+
+PS1="${_prompt}"

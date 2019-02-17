@@ -1,0 +1,36 @@
+[user]
+    name = {{ .name }}
+    email = {{ .github.email }}
+
+[github]
+    user = {{ .github.username }}
+
+[core]
+    editor = vim
+    excludesfile = ~/.gitignore_global
+
+[alias]
+    gl = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    glb = log --graph --decorate --pretty=oneline --abbrev-commit
+    hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    b = branch
+    d = diff
+    dc = diff --cached
+    st = status -sb
+    ci = commit
+    co = checkout
+    serve = daemon --reuseaddr --base-path=. --export-all --verbose
+
+[color]
+    ui = true
+
+[color "branch"]
+    current = green reverse
+    local = green
+    remote = red
+
+[branch]
+    autosetuprebase = always
+
+[push]
+    default = simple

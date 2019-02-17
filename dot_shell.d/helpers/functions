@@ -1,0 +1,29 @@
+#!/bin/bash
+
+is_root() {
+  [[ $(whoami) =~ .*root.* ]]
+}
+
+load_scripts() {
+    echo "Loading scripts..."
+    local _shell_config_dir _activated_modes_file
+
+    _shell_dir=~/.shell.d
+    _activated_modes_file=~/.shell.d/config/activated_modes
+
+    # Always loaded scripts
+    source ${_shell_dir}/path
+    source ${_shell_dir}/ssh
+
+    while IFS= read -r i; do
+      # echo "Loading script from ${_shell_config_dir}/${i}"
+      source ${_shell_dir}/plugins/${i}
+    done < ${_activated_modes_file}
+
+    source ${_shell_dir}/prompt
+    source ${_shell_dir}/shell_info
+}
+
+xx () {
+  curl http://cheat.sh/$@
+}

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+kubernetes_prompt_info() {
+  local _context
+  _context=$(kubectl config current-context)
+  if [[ -n ${_context} ]]; then
+    echo -e "${BoldGreyFg}<k8s: ${context}>${ResetColor}"
+  else
+    echo ""
+  fi
+}
+
+info_1_kubernetes() {
+  kubectl config current-context
+}
+
+info_2_kubernetes() {
+  kubectl config get-contexts
+}

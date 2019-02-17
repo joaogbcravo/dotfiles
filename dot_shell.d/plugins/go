@@ -1,0 +1,21 @@
+#!/bin/bash
+
+init_goenv() {
+  export GOENV_ROOT="$HOME/.goenv"
+  export PATH="$GOENV_ROOT/bin:$PATH"
+
+  if command -v pyenv > /dev/null; then
+    echo "Initializing GOENV..."
+    eval "$(goenv init -)";
+  fi
+}
+
+info_1_go() {
+  go version
+}
+
+info_2_go() {
+  goenv versions
+}
+
+init_goenv

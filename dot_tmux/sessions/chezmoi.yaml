@@ -1,0 +1,9 @@
+---
+session_name: chezmoi
+windows:
+- window_name: base
+  layout: tiled
+  shell_command_before:
+    - cd ~/
+  panes:
+    - echo ola

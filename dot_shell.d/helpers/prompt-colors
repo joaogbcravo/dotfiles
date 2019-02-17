@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+# prompt-colors.sh
+#
+# source this file to get color definitions
+# if $debug or $verbose is set, the definitions
+# are also printed to STDERR.
+
+# https://misc.flogisoft.com/bash/tip_colors_and_formatting
+
+source ~/.shell.d/helpers/colors
+
+define_color_names() {
+  local AttrNorm=20
+  local AttrBright=1
+  local AttrDim=2
+  local AttrUnder=4
+  local AttrBlink=5
+  local AttrRev=7
+  local AttrHide=8
+
+  # _map_colors ATTRNAME ATTRVALUE
+  #
+  # Defines three names for every color, attribute combintaion:
+  #    {ATTRNAME}{COLORNAME}
+  #    {ATTRNAME}{COLORNAME}Fg
+  #    {ATTRNAME}{COLORNAME}Bg
+  #
+  # Example: BoldRed, BoldRedFg, BoldRedBg
+  _map_colors() {
+    local i=1
+
+    if [[ "${CURRENT_SHELL}" == "bash" ]]; then
+      i=0;
+    fi
+
+    local attrname="$1"
+    local attrcode=$2
+    for (( ;i< ${#colors[@]} ;i+=2)); do
+       local colorname=${colors[$i+1]}
+       local colorcode=${colors[$i]}
+
+       longcolorname="${attrname}${colorname}"
+       _def_fg_color ${longcolorname}Fg $attrcode $colorcode
+       _def_bg_color ${longcolorname}Bg $attrcode $colorcode
+     done
+
+  }
+
+  _term_color() {
+    local cv
+    if (( $# > 1 )); then
+      cv="${1};${2};5;${3}"
+    else
+      cv="${1}"
+    fi
+    _term_color_ $cv
+  }
+
+  if [[ "${CURRENT_SHELL}" == "bash" ]]; then
+    _term_color_() {
+      echo  "\001\e[${1}m\002"
+    }
+  elif [[ "${CURRENT_SHELL}" == "zsh" ]]; then
+    _term_color_() {
+      echo "%{\e[${1}m%}"
+    }
+  fi
+
+
+  _def_fg_color() {
+    _def_color ${1} ${2} 38 ${3}
+  }
+
+  _def_bg_color() {
+    _def_color ${1} ${2} 48 ${3}
+  }
+
+  # def_color NAME ATTRCODE COLORCODE
+  _def_color() {
+    local def="$1=\"\`_term_color $2 $3 $4\`\""
+    if [[ -n "$debug$verbose" ]]; then
+      echo 1>&2 "+ $def"
+    fi
+    eval "$def"
+  }
+
+  _map_colors Bold   $AttrBright
+  # _map_colors Blink  $AttrBlink
+  # _map_colors Dim    $AttrDim
+  _map_colors ''     $AttrNorm
+
+  _def_fg_color IntenseBlack 0 90
+  _def_color ResetColor   0
+}
+
+# do the color definitions only once
+if [[ ${#Colors[*]} = 0 || -z "$IntenseBlack" || -z "$ResetColor" ]]; then
+  define_color_names
+fi

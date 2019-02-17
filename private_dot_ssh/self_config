@@ -1,0 +1,14 @@
+
+################################################################################
+### Personal
+############
+
+Host github.com
+  User joaogbcravo
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/id_rsa_github
+
+Host bitbucket.org
+  User joaogbcravo
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/id_rsa_github

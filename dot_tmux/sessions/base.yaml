@@ -1,0 +1,7 @@
+---
+session_name: 0-base
+windows:
+- window_name: base
+  layout: tiled
+  panes:
+    - echo base

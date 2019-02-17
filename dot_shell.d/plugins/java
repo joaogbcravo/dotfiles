@@ -1,0 +1,24 @@
+#!/bin/bash
+
+init_jenv() {
+  if command -v jenv > /dev/null;
+  then
+    echo "Initializing JENV..."
+    eval "$(jenv init -)";
+    PATH="/usr/local/opt/jenv/shims:$PATH"
+  fi
+}
+
+info_1_java() {
+  java -version
+  echo "---"
+  jps
+}
+
+info_2_java() {
+  jenv versions
+  echo "---"
+  jps -mlvV
+}
+
+init_jenv

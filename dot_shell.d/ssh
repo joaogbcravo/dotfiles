@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Compile all configurations from different child directories of .ssh folder.
+# and add override the .ssh/config file
+function compile-ssh-config {
+  cat ~/.ssh/**/config > ~/.ssh/config;
+  cat ~/.ssh/self_config >> ~/.ssh/config
+}
+
+# Make ssh command compile configurations before run
+alias ssh='compile-ssh-config && ssh'

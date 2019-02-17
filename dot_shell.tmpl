@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+{{- if .shared_machine }}
+MY_ENVIRONMENT={{ .my_environment }}
+IS_SERVER="true"
+{{- end}}
+
+source ~/.shell.d/helpers/prompt-colors
+source ~/.shell.d/helpers/functions
+
+_THEME_PROMPT_USER={{ "${" }}{{ .theme.prompt.user }}{{ "}" }}
+_THEME_PROMPT_HOST={{ "${" }}{{ .theme.prompt.host }}{{ "}" }}
+_THEME_PROMPT_DIR={{ "${" }}{{ .theme.prompt.dir }}{{ "}" }}
+_THEME_PROMPT_LINE={{ "${" }}{{ .theme.prompt.line }}{{ "}" }}
+_THEME_PROMPT_BG={{ "${" }}{{ .theme.prompt.bg }}{{ "}" }}
+
+# alias
+alias suroot="sudo -E -s"
+
+
+# Load activated scripts
+load_scripts

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if is_root || [[ ${IS_SERVER} == "true" ]]; then
+  _THEME_GIT_PROMPT_PREFIX_COLOR=${BoldWhiteFg}
+  _THEME_GIT_PROMPT_DIRTY_COLOR=${BoldCyan1Fg}
+else
+  _THEME_GIT_PROMPT_PREFIX_COLOR=${BoldDarkOrangeFg}
+  _THEME_GIT_PROMPT_DIRTY_COLOR=${BoldRed1Fg}
+fi
+
+_THEME_GIT_PROMPT_PREFIX="on ${_THEME_GIT_PROMPT_PREFIX_COLOR}"
+_THEME_GIT_PROMPT_SUFFIX=" "
+_THEME_GIT_PROMPT_DIRTY=" ${_THEME_GIT_PROMPT_DIRTY_COLOR}✖"
+_THEME_GIT_PROMPT_CLEAN=""
+
+if [[ "${CURRENT_SHELL}" == "bash" ]]; then
+  parse_git_dirty() {
+  	local STATUS=''
+    STATUS=$(command git status --porcelain 2> /dev/null | tail -n1)
+  	if [[ -n ${STATUS} ]]
+  	then
+  		echo "${_THEME_GIT_PROMPT_DIRTY}"
+  	else
+  		echo "${_THEME_GIT_PROMPT_CLEAN}"
+  	fi
+  }
+
+  git_prompt_info() {
+  	local ref
+  	if [[ "$(command git config --get oh-my-zsh.hide-status 2>/dev/null)" != "1" ]]
+  	then
+  		ref=$(command git symbolic-ref HEAD 2> /dev/null)  || ref=$(command git rev-parse --short HEAD 2> /dev/null)  || return 0
+  		echo -e "${_THEME_GIT_PROMPT_PREFIX}${ref#refs/heads/}$(parse_git_dirty)${_THEME_GIT_PROMPT_SUFFIX}"
+  	fi
+  }
+elif [[ "${CURRENT_SHELL}" == "zsh" ]]; then
+  ZSH_THEME_GIT_PROMPT_PREFIX=${_THEME_GIT_PROMPT_PREFIX}
+
+  ZSH_THEME_GIT_PROMPT_SUFFIX=${_THEME_GIT_PROMPT_SUFFIX}
+  ZSH_THEME_GIT_PROMPT_DIRTY=${_THEME_GIT_PROMPT_DIRTY}
+  ZSH_THEME_GIT_PROMPT_CLEAN=${_THEME_GIT_PROMPT_CLEAN}
+fi

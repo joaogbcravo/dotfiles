@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Load .shell
+export CURRENT_SHELL="bash"
+source ~/.shell
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
