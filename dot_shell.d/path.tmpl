@@ -6,6 +6,6 @@ PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
 # Add sbin
 PATH="/usr/local/sbin:$PATH"
 
-{{- if not .shared_machine }}
-PATH="$HOME/.local/share/chezmoi/.chezmoi_helpers/bin:$PATH"
-{{- end }}
+# Add .local/bin
+PATH="$HOME/.local/bin:$PATH"
+
