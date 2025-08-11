@@ -1,0 +1,129 @@
+# ~/.config/starship.toml
+
+format = '''
+$cmd_duration $status$line_break
+
+[─ $time $fill ](fg:current_line) $docker_context$kubernetes[─ $os $shell ─](fg:current_line)
+[╭─](fg:bold white)$username$hostname $container $directory $git_branch $git_status
+[╰─➜ ](fg:bold white)
+'''
+
+add_newline = false
+palette = "dracula"
+
+# Palettes definition
+[palettes.dracula]
+foreground = "#F8F8F2"
+background = "#282A36"
+current_line = "#44475A"
+primary = "#1E1F29"
+box = "#44475A"
+blue = "#6272A4"
+cyan = "#8BE9FD"
+green = "#50FA7B"
+orange = "#FFB86C"
+pink = "#FF79C6"
+purple = "#BD93F9"
+red = "#FF5555"
+yellow = "#F1FA8C"
+
+[fill]
+symbol = "─"
+style = "fg:current_line"
+
+############################################################################################################################################
+# Last command information
+
+[cmd_duration]
+min_time = 0 # In TOML, durations are integers. `00` is not valid.
+show_milliseconds = true
+show_notifications = true
+format = "\\[[⚡](yellow)[$duration](white)\\]"
+
+[status]
+disabled = false
+map_symbol = true
+pipestatus = true
+format = "(fg:current_line)[$symbol $common_meaning$signal_name $status]($style)"
+
+############################################################################################################################################
+# New prompt - contexts line
+
+[time]
+format = "[$time](fg:current_line)"
+time_format = "%a %b%e %H:%M:%S"
+disabled = false
+
+[docker_context]
+format = '[\[$symbol$context\]](blue bold) '
+
+[kubernetes]
+format = '[\[$symbol$context( \($namespace\))\]]($style) '
+disabled = false
+
+[[kubernetes.contexts]]
+context_pattern = "production"
+style = "bold red"
+symbol = "🟥 "
+
+[[kubernetes.contexts]]
+context_pattern = "staging"
+style = "bold orange"
+symbol = "🟨 "
+
+[[kubernetes.contexts]]
+context_pattern = "docker-desktop"
+style = "bold green"
+symbol = "🟩 "
+
+[os]
+format = "[$symbol](fg:current_line)"
+disabled = false
+[os.symbols]
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = ""
+CentOS = ""
+Debian = ""
+Fedora = ""
+Linux = ""
+Macos = ""
+NixOS = ""
+openSUSE = ""
+Redhat = ""
+RedHatEnterprise = ""
+SUSE = ""
+Ubuntu = ""
+Unknown = ""
+
+[shell]
+format = "[$indicator](fg:current_line)"
+unknown_indicator = "shell"
+powershell_indicator = "powershell"
+fish_indicator = "fish"
+disabled = false
+
+############################################################################################################################################
+# New prompt Active Line
+
+[username]
+format = "[ $user@](fg:foreground bg:box)"
+show_always = true
+
+[hostname]
+format = "[$hostname $ssh_symbol](white bg:box)[](fg:box)"
+ssh_only = false
+
+[container]
+format = '[$symbol \[$name\]](fg:bold purple)'
+
+[directory]
+format = "in [$read_only$truncation_symbol$path](yellow)"
+truncation_symbol = ">> "
+home_symbol = "~/"
+truncation_length = 2
+read_only_style = "" # This would typically be a style string, e.g., "red" if you want a color.
+
+[git_branch]
+format = "[$symbol$branch](orange)"

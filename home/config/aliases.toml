@@ -1,0 +1,69 @@
+[aliases]
+
+# Directories
+'..' =  '../'
+'...' =  '../..'
+'....' =  '../../..'
+
+# Alternatives
+df = 'dusage'
+_df ='/usr/bin/du'
+
+cat = 'bat --paging=never'
+_cat = '/bin/cat'
+
+top = 'btm'
+_top = '/usr/bin/top'
+
+grep = 'rg'
+_grep = '/usr/bin/grep'
+
+find = 'fd'
+_find = '/usr/bin/find'
+
+tree = 'tee'
+_tree  = '/usr/bin/tree'
+
+# GIT
+g = 'git'
+ga = 'git add'
+gau = 'git add -u'
+gaa = 'git add -A'
+gco = 'git checkout'
+gb = 'git branch'
+gcm = 'git commit -m'
+gs = 'git status --short'
+gd = 'git diff'
+gdc = 'git diff --cached'
+gds = 'git diff --staged'
+gl = 'git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset" --date=short'
+grbi='git rebase --interactive'
+gclean = 'git clean -nd'
+gcleanforce = 'git clean -fd'
+
+# LS
+_ls = '/bin/ls'
+# https://github.com/chaqchase/lla/issues/101
+ls = 'f() { lla $@ 2> /dev/null || ls $@; } ; f'
+l = 'lla --icons --long'
+lt = 'lla --icons --tree'
+
+# Shell copy
+pbc = 'f() { if [ "$(uname)" = "Darwin" ]; then pbcopy; else xclip -selection clipboard; fi; } ; f'
+pbp = 'f() { if [ "$(uname)" = "Darwin" ]; then pbpaste; else xclip -selection clipboard -o; fi; } ; f'
+
+# Utils
+pwdc = 'pwd | pbcopy'                          # Copy corrent working directory to the pasteboard/clipboard
+mkcd = 'f() { mkdir -p "$1" && cd "$1"; } ; f' # Make a directory an enter on it
+
+# Kubernetes.
+k = 'kubectl'
+kn ='f() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d" " -f6 ; } ; f'
+kge='kubectl get events --sort-by=".metadata.creationTimestamp"'
+
+# Nix updates
+nfu = 'nix flake update'
+nhh = 'nh home switch $HOME/.dotfiles --configuration $(hostname) --update --ask'
+nhd = 'nh darwin switch $HOME/.dotfiles --update --ask'
+nhhna = 'nh home switch $HOME/.dotfiles --configuration $(hostname)'
+nhdna = 'nh darwin switch $HOME/.dotfiles'

@@ -1,0 +1,30 @@
+version: '3'
+
+vars:
+  IMAGE_NAME: nix-ubuntu24
+  CONTAINER_NAME: nix-sandbox
+  CONFIG_DIR: '/{{.HOME}}/.dotfiles'
+
+tasks:
+  up:
+    dir: '/{{ .TASKFILE_DIR }}'
+    env: 
+      DOTFILES_DIR: '{{.CONFIG_DIR}}'
+    cmds:
+      - docker compose up --build --no-recreate -d
+      - docker compose exec -ti linux-sandbox bash
+
+  down:
+    dir: '/{{ .TASKFILE_DIR }}'
+    env: 
+      DOTFILES_DIR: '{{.CONFIG_DIR}}'
+    cmds:
+      - docker compose down
+
+  clean:
+    dir: '/{{ .TASKFILE_DIR }}'
+    env: 
+      DOTFILES_DIR: '{{.CONFIG_DIR}}'
+    cmds:
+      - docker compose down -v
+      - docker compose rm -v 

@@ -1,0 +1,16 @@
+[General]
+_NOTE = "DO NOT EDIT - File managed by home-manager"
+editor = "vim"
+column = 120
+selectcmd = "fzf"
+backend = "gist"
+# sortby  = "description"         # specify how snippets get sorted (recency (default), -recency, description, -description, command, -command, output, -output)
+# cmd = ["sh", "-c"]              # specify the command to execute the snippet with
+# color = false                   # enables output coloring with fzf, same as '--color' flag
+
+
+[Gist]
+file_name = "pet-snippet.toml"
+gist_id = "1df507d431146fd60975484c00e41526"
+public = false
+auto_sync = true

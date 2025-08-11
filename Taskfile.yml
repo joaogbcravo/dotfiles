@@ -1,0 +1,6 @@
+version: '3'
+
+includes:
+  sandbox:
+    taskfile: ./setup/sandbox/docker/ubuntu24.04/
+    aliases: [s]
