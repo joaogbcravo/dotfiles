@@ -51,14 +51,8 @@
         };
 
     in {
-      # homeConfigurations.linux-sandbox = import ./hosts/linux-sandbox.nix { inherit inputs self; };
-      homeConfigurations = {
-        linux-sandbox = home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs = { inherit nur inputs self; };
-          pkgs = mkPkgs systems.linux;
-          modules = [ ./home/home.nix ./hosts/linux-sandbox.nix ];
-        };
 
+      homeConfigurations = {
         macmini = home-manager.lib.homeManagerConfiguration {
           extraSpecialArgs = { inherit inputs nur self; };
 
@@ -68,6 +62,19 @@
             ./home/home.nix
             ./hosts/macmini.nix
           ];
+        };
+
+        # Sandbox configurations
+        docker-ubuntu-sandbox = home-manager.lib.homeManagerConfiguration {
+          extraSpecialArgs = { inherit nur inputs self; };
+          pkgs = mkPkgs systems.linux;
+          modules = [ ./home/home.nix ./hosts/docker-ubuntu-sandbox.nix ];
+        };
+
+        vm-ubuntu-sandbox = home-manager.lib.homeManagerConfiguration {
+          extraSpecialArgs = { inherit nur inputs self; };
+          pkgs = mkPkgs systems.linux;
+          modules = [ ./home/home.nix ./hosts/vm-ubuntu-sandbox.nix ];
         };
       };
 

@@ -21,7 +21,7 @@ let
 
   ];
 
-  linuxCommonPkgs = with pkgs; [ xclip ];
+  linuxCommonPkgs = with pkgs; [ docker docker-compose xclip ];
 
   x86_64LinuxPkgs = with pkgs; [ google-chrome spotify ];
 

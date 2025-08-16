@@ -96,8 +96,6 @@
       "bricklink-studio"
       # Docker
       "docker-desktop"
-      # Multi-platform multi-messaging app
-      "ferdium"
       # Terminal
       "ghostty"
       # VPN client for secure internet access and private browsing

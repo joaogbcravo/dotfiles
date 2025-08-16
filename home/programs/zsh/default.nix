@@ -30,9 +30,7 @@
       setopt AUTO_PUSHD
 
       setopt PUSHD_IGNORE_DUPS
-    '';
 
-    initExtra = ''
       # Source secrets file if it exists
       [ -f $HOME/.dotfiles/home/secrets ] && set -a; source $HOME/.dotfiles/home/secrets; set +a
     '';

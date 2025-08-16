@@ -1,0 +1,45 @@
+version: '3'
+
+vars:
+  IMAGE_NAME: nix-ubuntu24
+  CONTAINER_NAME: nix-sandbox
+
+common: &common_settings
+  dir: '/{{ .TASKFILE_DIR }}'
+  env:
+    DOTFILES_DIR: '{{.CONFIG_DIR}}'
+
+tasks:
+  up:
+    <<: *common_settings
+    cmds:
+      - vagrant up --provision
+      - vagrant rsync
+      - vagrant ssh -- -t "sudo su - sandbox -c /home/sandbox/.dotfiles/setup/bootstrap/install.sh"
+
+  install:
+    <<: *common_settings
+    cmds:
+      - vagrant rsync
+      - vagrant ssh -- -t "sudo su - sandbox -c /home/sandbox/.dotfiles/setup/bootstrap/install.sh"
+
+  ssh:
+    <<: *common_settings
+    cmds:
+      - vagrant ssh -- -t "sudo su - sandbox"
+
+  update:
+    <<: *common_settings
+    cmds:
+      - vagrant rsync
+      - vagrant ssh -c "sudo -i -u sandbox bash -ic 'nhhna'"
+
+  down:
+    <<: *common_settings
+    cmds:
+      - vagrant halt
+
+  clean:
+    <<: *common_settings
+    cmds:
+      - vagrant destroy -f

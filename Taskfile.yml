@@ -1,6 +1,9 @@
 version: '3'
 
 includes:
-  sandbox:
+  sandbox-docker:
     taskfile: ./setup/sandbox/docker/ubuntu24.04/
-    aliases: [s]
+    aliases: [sd]
+  sandbox-vagrant:
+    taskfile: ./setup/sandbox/vagrant/ubuntu24.04/
+    aliases: [sv]

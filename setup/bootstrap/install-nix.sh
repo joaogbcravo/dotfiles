@@ -27,22 +27,19 @@ has_systemd() {
 
 install_nix() {
   local extra_flags=()
-
   # Check environment specifics
   if [[ "$1" == "Linux" ]]; then
     if is_docker && ! has_systemd; then
       echo "Detected Docker without systemd: installing Nix in --no-daemon mode."
-      extra_flags+=(install linux --no-start-daemon --init none --extra-conf "sandbox = false")
+      extra_flags+=(linux --no-start-daemon --init none --extra-conf "sandbox = false")
     fi
   fi
 
   # Run the Determinate installer
-
-  if [ ! -f /tmp/install-nix ]; then
+  if ! which nix ; then
     curl --proto '=https' --tlsv1.2 -sSf -L  https://install.determinate.systems/nix > /tmp/install-nix
-    sh /tmp/install-nix "${extra_flags[@]}" --no-confirm
+    sh /tmp/install-nix install "${extra_flags[@]}" --no-confirm
   else
-
     echo "Nix already installed. Skipping"
   fi
 
