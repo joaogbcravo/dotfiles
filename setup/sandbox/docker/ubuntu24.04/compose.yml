@@ -1,11 +1,11 @@
 services:
-  linux-sandbox:
-    hostname: linux-sandbox
+  docker-ubuntu-sandbox:
+    hostname: docker-ubuntu-sandbox
     build: .
     volumes:
       - nix-store:/nix
       - home-sandbox:/home/sandbox
-      - ${DOTFILES_DIR}:/home/sandbox/.dotfiles
+      - ${DOTFILES_DIR:-$HOME/.dotfiles}:/home/sandbox/.dotfiles
 volumes:
   nix-store:
   home-sandbox:

@@ -5,26 +5,40 @@ vars:
   CONTAINER_NAME: nix-sandbox
   CONFIG_DIR: '/{{.HOME}}/.dotfiles'
 
+common: &common_settings
+  dir: '/{{ .TASKFILE_DIR }}'
+  env:
+    DOTFILES_DIR: '{{.CONFIG_DIR}}'
+
 tasks:
   up:
-    dir: '/{{ .TASKFILE_DIR }}'
-    env: 
-      DOTFILES_DIR: '{{.CONFIG_DIR}}'
+    <<: *common_settings
     cmds:
       - docker compose up --build --no-recreate -d
-      - docker compose exec -ti linux-sandbox bash
+      - docker compose exec -ti docker-ubuntu-sandbox bash
+
+  install:
+    <<: *common_settings
+    cmds:
+      - docker compose exec -ti docker-ubuntu-sandbox /home/sandbox/.dotfiles/setup/bootstrap/install.sh
+
+  exec:
+    <<: *common_settings
+    cmds:
+      - docker compose exec -ti docker-ubuntu-sandbox bash
+
+  update:
+    <<: *common_settings
+    cmds:
+      - docker compose exec -ti docker-ubuntu-sandbox bash -ic nhhna
 
   down:
-    dir: '/{{ .TASKFILE_DIR }}'
-    env: 
-      DOTFILES_DIR: '{{.CONFIG_DIR}}'
+    <<: *common_settings
     cmds:
       - docker compose down
 
   clean:
-    dir: '/{{ .TASKFILE_DIR }}'
-    env: 
-      DOTFILES_DIR: '{{.CONFIG_DIR}}'
+    <<: *common_settings
     cmds:
       - docker compose down -v
-      - docker compose rm -v 
+      - docker compose rm -v

@@ -44,8 +44,9 @@ install_nix() {
   fi
 
   if [[ "$1" == "Linux" ]]; then
+    # Ensure Nix is configured correctly for Docker environments
     if is_docker && ! has_systemd; then
-      chown -R sandbox /nix
+      sudo chown -R sandbox /nix
       sudo tee /etc/nix/nix.conf > /dev/null <<'EOF'
 # WARNING: this file is generated from the nix.* options in
 # your nix-darwin configuration. Do not edit it!
